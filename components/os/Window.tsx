@@ -15,6 +15,13 @@ export default function Window({ id, title, children }: WindowProps) {
   const { windows, windowOrder, closeWindow, minimizeWindow, focusWindow } = useWindowStore();
   const windowState = windows[id];
   const [isMaximized, setIsMaximized] = useState(false);
+  const orderIndex = windowOrder.indexOf(id);
+  const [layout, setLayout] = useState({
+    x: 100 + orderIndex * 30,
+    y: 100 + orderIndex * 30,
+    width: 650,
+    height: 450,
+  });
 
   // If the window is closed or doesn't exist in store, don't render it.
   if (!windowState) return null;
@@ -34,12 +41,16 @@ export default function Window({ id, title, children }: WindowProps) {
     <AnimatePresence>
       {!windowState.isMinimized && (
         <Rnd
-          default={{
-            x: 100 + (windowOrder.indexOf(id) * 30), // Offset slightly based on order so they don't stack perfectly
-            y: 100 + (windowOrder.indexOf(id) * 30),
-            width: 650,
-            height: 450,
-          }}
+          position={{ x: layout.x, y: layout.y }}
+          size={{ width: layout.width, height: layout.height }}
+          onDragStop={(e, d) => setLayout((prev) => ({ ...prev, x: d.x, y: d.y }))}
+          onResizeStop={(e, dir, ref, delta, position) =>
+            setLayout({
+              width: parseInt(ref.style.width, 10),
+              height: parseInt(ref.style.height, 10),
+              ...position,
+            })
+          }
           minWidth={350}
           minHeight={250}
           bounds="parent" // Keeps the window from being dragged entirely off-screen
