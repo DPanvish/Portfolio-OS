@@ -9,10 +9,12 @@ import { useWindowStore } from "@/store/useWindowStore";
 
 // Import Apps
 import About from "@/components/apps/About";
+import Experience from "@/components/apps/Experience";
 
 // Map string identifiers from the store to actual React components
 const AppRegistry: Record<string, React.ReactNode> = {
   About: <About />,
+  Experience: <Experience />,
 };
 
 export default function Home() {
