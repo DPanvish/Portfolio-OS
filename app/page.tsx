@@ -13,6 +13,7 @@ import Experience from "@/components/apps/Experience";
 import Projects from "@/components/apps/Projects";
 import ProjectDetail from "@/components/apps/ProjectDetail";
 import Skills from "@/components/apps/Skills";
+import Contact from "@/components/apps/Contact";
 import { OSWindow } from "@/store/useWindowStore";
 
 // Dynamically render the correct app component based on the window state
@@ -23,6 +24,7 @@ const renderApp = (app: OSWindow) => {
     case 'Projects': return <Projects />;
     case 'ProjectDetail': return <ProjectDetail projectId={app.id} />;
     case 'Skills': return <Skills />;
+    case 'Contact': return <Contact />;
     default:
       return (
         <div className="p-8 flex flex-col items-center justify-center h-full text-slate-400 text-center">

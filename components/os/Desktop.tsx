@@ -9,6 +9,7 @@ const desktopApps = [
   { id: "experience", title: "Experience", component: "Experience" },
   { id: "projects", title: "Projects", component: "Projects" },
   { id: "skills", title: "Task Manager", component: "Skills" },
+  { id: "contact", title: "Mail", component: "Contact" },
   { id: "terminal", title: "Terminal", component: "Terminal" }
 ];
 
