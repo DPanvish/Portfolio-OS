@@ -39,15 +39,15 @@ export default function CustomCursor() {
 
       const target = e.target as HTMLElement;
       
-      // 1. Hovering over a draggable window title bar
+      // Hovering over a draggable window title bar
       if (target.closest('.window-titlebar')) {
         setCursorState("grab");
       } 
-      // 2. Hovering over desktop icons (they have a specific group class)
+      // Hovering over desktop icons (they have a specific group class)
       else if (target.closest('button.group')) {
         setCursorState("magnet");
       } 
-      // 3. Hovering over terminal input or text areas
+      // Hovering over terminal input or text areas
       else if (
         target.tagName.toLowerCase() === 'input' || 
         target.tagName.toLowerCase() === 'textarea' || 
@@ -56,7 +56,7 @@ export default function CustomCursor() {
       ) {
         setCursorState("text");
       } 
-      // 4. Hovering over generic buttons or links
+      // Hovering over generic buttons or links
       else if (
         window.getComputedStyle(target).cursor === 'pointer' || 
         target.tagName.toLowerCase() === 'button' || 
@@ -65,7 +65,7 @@ export default function CustomCursor() {
       ) {
         setCursorState("pointer");
       } 
-      // 5. Default state
+      // Default state
       else {
         setCursorState("default");
       }

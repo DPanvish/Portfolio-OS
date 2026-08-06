@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { playRetroSound } from '@/lib/audio';
 
 export interface OSWindow {
   id: string;
@@ -16,13 +17,19 @@ interface WindowStore {
   minimizeWindow: (id: string) => void;
   restoreWindow: (id: string) => void;
   focusWindow: (id: string) => void;
+  soundEnabled: boolean;
+  toggleSound: () => void;
 }
 
 export const useWindowStore = create<WindowStore>((set) => ({
   windows: {},
   windowOrder: [],
+  soundEnabled: false, // Muted by default per specs
+  
+  toggleSound: () => set((state) => ({ soundEnabled: !state.soundEnabled })),
   
   openWindow: (id, title, component) => set((state) => {
+    playRetroSound('open', state.soundEnabled);
     // If the window is already open, just restore and focus it
     if (state.windows[id]) {
       return {
@@ -45,6 +52,7 @@ export const useWindowStore = create<WindowStore>((set) => ({
   }),
   
   closeWindow: (id) => set((state) => {
+    playRetroSound('close', state.soundEnabled);
     const newWindows = { ...state.windows };
     delete newWindows[id];
     return {
@@ -53,15 +61,20 @@ export const useWindowStore = create<WindowStore>((set) => ({
     };
   }),
   
-  minimizeWindow: (id) => set((state) => ({
-    windows: {
-      ...state.windows,
-      [id]: { ...state.windows[id], isMinimized: true }
-    }
-  })),
+  minimizeWindow: (id) => set((state) => {
+    playRetroSound('minimize', state.soundEnabled);
+    return {
+      windows: {
+        ...state.windows,
+        [id]: { ...state.windows[id], isMinimized: true }
+      }
+    };
+  }),
   
-  restoreWindow: (id) => set((state) => ({
-    windows: {
+  restoreWindow: (id) => set((state) => {
+    playRetroSound('open', state.soundEnabled);
+    return {
+      windows: {
       ...state.windows,
       [id]: { ...state.windows[id], isMinimized: false }
     },

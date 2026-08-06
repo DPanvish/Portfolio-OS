@@ -65,6 +65,16 @@ export default function Taskbar() {
       {/* System Tray (Status & Clock) */}
       <div className="flex items-center gap-4 text-xs font-medium text-slate-300 h-full py-1.5 flex-shrink-0">
         <div className="hidden sm:flex items-center gap-3 px-3 h-full bg-slate-800/50 rounded-md">
+          {/* Sound Toggle */}
+          <button 
+            onClick={() => useWindowStore.getState().toggleSound()} 
+            className="hover:text-white focus:outline-none flex items-center transition-colors group"
+            title={useWindowStore.getState().soundEnabled ? "Mute sound" : "Enable sound"}
+          >
+            <span className="group-active:scale-90 transition-transform">
+              {useWindowStore.getState().soundEnabled ? '🔊' : '🔇'}
+            </span>
+          </button>
           <span>🌐</span>
           <span>🔋 100%</span>
         </div>
