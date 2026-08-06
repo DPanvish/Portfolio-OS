@@ -75,12 +75,13 @@ export const useWindowStore = create<WindowStore>((set) => ({
     playRetroSound('open', state.soundEnabled);
     return {
       windows: {
-      ...state.windows,
-      [id]: { ...state.windows[id], isMinimized: false }
-    },
-    // Bring to front when restored
-    windowOrder: [...state.windowOrder.filter(wId => wId !== id), id]
-  })),
+        ...state.windows,
+        [id]: { ...state.windows[id], isMinimized: false }
+      },
+      // Bring to front when restored
+      windowOrder: [...state.windowOrder.filter(wId => wId !== id), id]
+    };
+  }),
   
   focusWindow: (id) => set((state) => ({
     // Bring the focused window to the end of the array (highest z-index)
