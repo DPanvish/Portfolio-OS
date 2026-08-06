@@ -59,7 +59,7 @@ body {
   cursor: none !important;
 }
 
-/* Explicitly preserve native resize cursors for window edges */
+/* Explicitly disable native resize cursors so our custom glyphs can show */
 .custom-cursor-active .react-resizable-handle {
-  cursor: inherit; /* react-rnd will override this inline with e/w/n/s-resize */
+  cursor: none !important;
 }
