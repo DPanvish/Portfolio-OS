@@ -13,7 +13,7 @@ export default function LoginScreen({ onLogin }: { onLogin: () => void }) {
     e.preventDefault();
     if (password.toLowerCase() === 'visitor' || password === '') {
       setIsUnlocking(true);
-      playRetroSound('open', true); // Play success sound
+      playRetroSound('login', true); // Play majestic success chime
       setTimeout(() => onLogin(), 1200); // 1.2s unlock animation delay
     } else {
       setError(true);

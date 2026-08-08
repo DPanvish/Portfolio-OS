@@ -38,7 +38,7 @@ const renderApp = (app: OSWindow) => {
 };
 
 export default function Home() {
-  const [appState, setAppState] = useState<'booting' | 'login' | 'desktop'>('booting');
+  const [appState, setAppState] = useState<'pre-boot' | 'booting' | 'login' | 'desktop'>('pre-boot');
   const { windows } = useWindowStore();
   const openApps = Object.values(windows);
 
@@ -53,6 +53,19 @@ export default function Home() {
   return (
     <main className="relative w-screen h-screen overflow-hidden flex flex-col bg-slate-900 text-slate-100">
       
+      {/* 0. Audio Authorization Screen (Browsers require a click to play audio) */}
+      {appState === 'pre-boot' && (
+        <div 
+          onClick={() => setAppState('booting')}
+          className="absolute inset-0 z-[10000] bg-black flex flex-col items-center justify-center cursor-pointer hover:bg-slate-950 transition-colors"
+        >
+          <div className="w-16 h-16 rounded-full border-2 border-slate-600 flex items-center justify-center mb-6 animate-pulse shadow-[0_0_20px_rgba(255,255,255,0.1)]">
+            <span className="text-2xl text-slate-300">⏻</span>
+          </div>
+          <p className="text-slate-400 font-mono tracking-widest text-sm animate-bounce">CLICK TO POWER ON</p>
+        </div>
+      )}
+
       {/* 1. Cinematic Boot Sequence */}
       {appState === 'booting' && (
         <BootSequence onComplete={() => setAppState('login')} />
