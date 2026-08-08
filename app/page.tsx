@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Desktop from "@/components/os/Desktop";
 import Taskbar from "@/components/os/Taskbar";
 import Window from "@/components/os/Window";
 import BootSequence from "@/components/os/BootSequence";
+import LoginScreen from "@/components/os/LoginScreen";
 import { useWindowStore } from "@/store/useWindowStore";
 
 // Import Apps
@@ -15,7 +16,6 @@ import ProjectDetail from "@/components/apps/ProjectDetail";
 import Skills from "@/components/apps/Skills";
 import Contact from "@/components/apps/Contact";
 import Terminal from "@/components/apps/Terminal";
-import { OSWindow } from "@/store/useWindowStore";
 
 // Dynamically render the correct app component based on the window state
 const renderApp = (app: OSWindow) => {
@@ -32,25 +32,42 @@ const renderApp = (app: OSWindow) => {
         <div className="p-8 flex flex-col items-center justify-center h-full text-slate-400 text-center">
           <span className="text-4xl mb-4">🚧</span>
           <p>The <strong>{app.component}</strong> app is currently under construction.</p>
-          <p className="text-xs mt-2 opacity-60">We will build this out next in Phase 3.</p>
         </div>
       );
   }
 };
 
 export default function Home() {
-  const [booted, setBooted] = useState(false);
+  const [appState, setAppState] = useState<'booting' | 'login' | 'desktop'>('booting');
   const { windows } = useWindowStore();
   const openApps = Object.values(windows);
+
+  useEffect(() => {
+    // If they already logged in this session, skip straight to desktop
+    const hasLoggedIn = sessionStorage.getItem("hasLoggedIn");
+    if (hasLoggedIn === "true") {
+      setAppState('desktop');
+    }
+  }, []);
 
   return (
     <main className="relative w-screen h-screen overflow-hidden flex flex-col bg-slate-900 text-slate-100">
       
-      {/* The boot sequence will run once and then unmount */}
-      {!booted && <BootSequence onComplete={() => setBooted(true)} />}
+      {/* 1. Cinematic Boot Sequence */}
+      {appState === 'booting' && (
+        <BootSequence onComplete={() => setAppState('login')} />
+      )}
 
-      {/* Once booted, render the actual OS */}
-      {booted && (
+      {/* 2. Real-style OS Login Screen */}
+      {appState === 'login' && (
+        <LoginScreen onLogin={() => {
+          sessionStorage.setItem("hasLoggedIn", "true");
+          setAppState('desktop');
+        }} />
+      )}
+
+      {/* 3. The Desktop Environment */}
+      {appState === 'desktop' && (
         <>
           <Desktop>
             {/* Dynamically render all open windows */}
