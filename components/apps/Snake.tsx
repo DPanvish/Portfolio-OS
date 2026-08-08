@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 const GRID_SIZE = 25;
 const CELL_SIZE = 12;
@@ -61,15 +61,25 @@ export default function Snake() {
     return () => window.removeEventListener('keydown', handleKeyDown, { capture: true });
   }, [isPlaying]);
 
+  const directionRef = useRef(direction);
+  const foodRef = useRef(food);
+
+  // Keep refs in sync with state for the game loop to access without resetting the interval
+  useEffect(() => { directionRef.current = direction; }, [direction]);
+  useEffect(() => { foodRef.current = food; }, [food]);
+
   // Game Loop
   useEffect(() => {
     if (!isPlaying || gameOver) return;
     
-    const moveSnake = () => {
+    const interval = setInterval(() => {
       setSnake((prev) => {
+        const currentDir = directionRef.current;
+        const currentFood = foodRef.current;
+        
         const head = prev[0];
-        const newHead = [head[0] + direction[0], head[1] + direction[1]];
-        lastProcessedDirection.current = direction; // Update the processed direction
+        const newHead = [head[0] + currentDir[0], head[1] + currentDir[1]];
+        lastProcessedDirection.current = currentDir; // Update the processed direction
         
         // Wall collision or Self collision
         if (
@@ -85,7 +95,7 @@ export default function Snake() {
         const newSnake = [newHead, ...prev];
         
         // Eat food
-        if (newHead[0] === food[0] && newHead[1] === food[1]) {
+        if (newHead[0] === currentFood[0] && newHead[1] === currentFood[1]) {
           setScore(s => s + 10);
           setFood([
             Math.floor(Math.random() * GRID_SIZE),
@@ -97,11 +107,10 @@ export default function Snake() {
         
         return newSnake;
       });
-    };
+    }, 120); // slightly crispier 120ms tick
 
-    const interval = setInterval(moveSnake, 80);
     return () => clearInterval(interval);
-  }, [direction, food, isPlaying, gameOver]);
+  }, [isPlaying, gameOver]); // Interval ONLY resets when play state changes!
 
   return (
     <div className="flex flex-col items-start p-4 bg-black/40 rounded border border-cyan-900/50 my-2 w-fit">
@@ -139,7 +148,7 @@ export default function Snake() {
         {/* Snake */}
         {snake.map((segment, i) => (
           <div 
-            key={i}
+            key={`${segment[0]}-${segment[1]}`} // Unique key prevents expensive React DOM re-renders
             className="absolute bg-cyan-400 rounded-sm"
             style={{
               left: segment[0] * CELL_SIZE,
