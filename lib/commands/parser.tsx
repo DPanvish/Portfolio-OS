@@ -26,6 +26,7 @@ export function parseCommand(commandStr: string): React.ReactNode {
             <li className="flex group"><strong className="text-cyan-400 w-28 group-hover:text-cyan-200 transition-colors">ls</strong> <span className="opacity-70 group-hover:opacity-100">// List neural directories</span></li>
             <li className="flex group"><strong className="text-cyan-400 w-28 group-hover:text-cyan-200 transition-colors">whoami</strong> <span className="opacity-70 group-hover:opacity-100">// Print active entity ID</span></li>
           </ul>
+          <p className="mt-4 pt-2 border-t border-cyan-500/10 text-cyan-600/60 text-xs italic">Tip: The system contains hidden Easter eggs. Try 'play snake', 'matrix', or 'hack'.</p>
         </div>
       );
     
@@ -61,6 +62,7 @@ export function parseCommand(commandStr: string): React.ReactNode {
           <span className="text-blue-400 drop-shadow-[0_0_5px_rgba(96,165,250,0.8)]">experience/</span>
           <span className="text-blue-400 drop-shadow-[0_0_5px_rgba(96,165,250,0.8)]">projects/</span>
           <span className="text-green-400 drop-shadow-[0_0_5px_rgba(74,222,128,0.8)] animate-pulse">contact.exe</span>
+          <span className="text-purple-400 drop-shadow-[0_0_5px_rgba(192,132,252,0.8)]">snake.bin</span>
         </div>
       );
     
@@ -77,11 +79,56 @@ export function parseCommand(commandStr: string): React.ReactNode {
       );
     
     case 'sudo':
-      return <div className="mb-4 text-pink-400 drop-shadow-[0_0_5px_rgba(244,114,182,0.6)]">PERMISSION DENIED. Usage: sudo [command]. Try: sudo hire-me</div>;
-    
-    case 'play snake':
-      return <div className="mb-4 text-yellow-400 drop-shadow-[0_0_5px_rgba(250,204,21,0.6)]">WARN: Neural snake module not yet synchronized. Check back later!</div>;
-    
+    case 'sudo su':
+      return <div className="mb-4 text-pink-400 drop-shadow-[0_0_5px_rgba(244,114,182,0.6)]">PERMISSION DENIED. This incident will be reported to the sysadmin. (Try: sudo hire-me)</div>;
+      
+    case 'matrix':
+      return (
+        <div className="mb-4 text-green-500 font-mono">
+          <p className="animate-pulse">Wake up, Neo...</p>
+          <p className="mt-1 opacity-80">The Matrix has you.</p>
+          <p className="mt-1 opacity-60">Follow the white rabbit.</p>
+          <p className="mt-4 text-xs opacity-50">Knock, knock, Neo.</p>
+        </div>
+      );
+      
+    case 'hack':
+      return (
+        <div className="mb-4 font-mono text-xs text-red-500">
+          <p>INITIALIZING MAINFRAME BREACH...</p>
+          <p className="animate-pulse">BYPASSING FIREWALL... SUCCESS.</p>
+          <p>DOWNLOADING CLASSIFIED FILES...</p>
+          <div className="w-full bg-red-950/50 h-2 mt-2 border border-red-500/30 rounded overflow-hidden">
+             <div className="bg-red-500 h-full w-[85%] animate-pulse" />
+          </div>
+          <p className="mt-2 text-pink-400 font-bold">ERROR: HACK TRACED. DISCONNECTING IN 3... 2... 1...</p>
+        </div>
+      );
+      
+    case 'system info':
+    case 'neofetch':
+      return (
+        <div className="mb-4 flex flex-col sm:flex-row gap-4 items-start font-mono text-xs">
+           <div className="text-cyan-500 whitespace-pre leading-tight">
+{`   ____  ____  
+  |_   _|| __ |
+    | |  |  _| 
+    |_|  |___| `}
+           </div>
+           <div className="text-cyan-100/80">
+              <p><span className="text-cyan-400 font-bold">OS:</span> Nexus Core v2.4.9.1</p>
+              <p><span className="text-cyan-400 font-bold">Kernel:</span> Quantum Linux 6.9.0</p>
+              <p><span className="text-cyan-400 font-bold">Uptime:</span> 99.99%</p>
+              <p><span className="text-cyan-400 font-bold">Shell:</span> bash</p>
+              <p><span className="text-cyan-400 font-bold">Resolution:</span> 1920x1080</p>
+              <p><span className="text-cyan-400 font-bold">DE:</span> UI/UX Pro Max</p>
+              <p><span className="text-cyan-400 font-bold">Theme:</span> Cyber-Glass [Dark]</p>
+              <p><span className="text-cyan-400 font-bold">Terminal:</span> Nexus_Term</p>
+              <p><span className="text-cyan-400 font-bold">CPU:</span> Quantum Neural Processor</p>
+           </div>
+        </div>
+      );
+
     case 'clear':
       // 'clear' is intercepted and handled by the Terminal component state itself
       return null;
