@@ -10,6 +10,7 @@ export default function Snake() {
   const [snake, setSnake] = useState(INITIAL_SNAKE);
   const [food, setFood] = useState(INITIAL_FOOD);
   const [direction, setDirection] = useState([0, -1]);
+  const lastProcessedDirection = useRef([0, -1]);
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -17,11 +18,12 @@ export default function Snake() {
   // Handle Input
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Enter'].includes(e.key)) {
+      if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(e.key)) {
          if (isPlaying) {
              e.stopPropagation();
              e.preventDefault();
-         } else if (e.key === 'Enter') {
+         } else if (e.key === ' ') {
+             // Use SPACE instead of Enter to prevent accidental triggers from terminal
              e.stopPropagation();
              e.preventDefault();
              setIsPlaying(true);
@@ -29,32 +31,35 @@ export default function Snake() {
              setSnake(INITIAL_SNAKE);
              setScore(0);
              setDirection([0, -1]);
+             lastProcessedDirection.current = [0, -1];
              return;
          }
       }
 
       if (!isPlaying) return;
 
+      // Prevent 180-degree immediate reverse suicide by checking the LAST PROCESSED direction
+      const lastDir = lastProcessedDirection.current;
+      
       switch (e.key) {
         case 'ArrowUp':
-          if (direction[1] !== 1) setDirection([0, -1]);
+          if (lastDir[1] !== 1) setDirection([0, -1]);
           break;
         case 'ArrowDown':
-          if (direction[1] !== -1) setDirection([0, 1]);
+          if (lastDir[1] !== -1) setDirection([0, 1]);
           break;
         case 'ArrowLeft':
-          if (direction[0] !== 1) setDirection([-1, 0]);
+          if (lastDir[0] !== 1) setDirection([-1, 0]);
           break;
         case 'ArrowRight':
-          if (direction[0] !== -1) setDirection([1, 0]);
+          if (lastDir[0] !== -1) setDirection([1, 0]);
           break;
       }
     };
     
-    // Use capture phase to intercept the keys before the Terminal input receives them
     window.addEventListener('keydown', handleKeyDown, { capture: true });
     return () => window.removeEventListener('keydown', handleKeyDown, { capture: true });
-  }, [direction, isPlaying]);
+  }, [isPlaying]);
 
   // Game Loop
   useEffect(() => {
@@ -64,8 +69,9 @@ export default function Snake() {
       setSnake((prev) => {
         const head = prev[0];
         const newHead = [head[0] + direction[0], head[1] + direction[1]];
+        lastProcessedDirection.current = direction; // Update the processed direction
         
-        // Wall collision
+        // Wall collision or Self collision
         if (
           newHead[0] < 0 || newHead[0] >= GRID_SIZE || 
           newHead[1] < 0 || newHead[1] >= GRID_SIZE ||
@@ -93,7 +99,7 @@ export default function Snake() {
       });
     };
 
-    const interval = setInterval(moveSnake, 80); // Fast snake!
+    const interval = setInterval(moveSnake, 80);
     return () => clearInterval(interval);
   }, [direction, food, isPlaying, gameOver]);
 
@@ -113,7 +119,7 @@ export default function Snake() {
       >
         {!isPlaying && !gameOver && (
           <div className="absolute inset-0 flex items-center justify-center text-cyan-500 bg-black/70 z-10 text-xs text-center font-bold tracking-widest backdrop-blur-sm">
-            PRESS [ENTER]<br/>TO INITIATE PROTOCOL
+            PRESS [SPACE]<br/>TO INITIATE PROTOCOL
           </div>
         )}
         

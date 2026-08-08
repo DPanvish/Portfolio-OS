@@ -1,15 +1,18 @@
 "use client";
 
-// A zero-dependency Web Audio API synthesizer for retro UI sounds.
-// This prevents us from needing actual .mp3/.wav files in the /public folder.
+let sharedAudioCtx: AudioContext | null = null;
+
 export const playRetroSound = (type: 'click' | 'open' | 'close' | 'minimize' | 'boot' | 'login' | 'type' | 'spawn', enabled: boolean) => {
   if (!enabled || typeof window === 'undefined') return;
   
   try {
-    const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
-    if (!AudioContext) return;
+    if (!sharedAudioCtx) {
+      const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+      if (!AudioContextClass) return;
+      sharedAudioCtx = new AudioContextClass();
+    }
     
-    const ctx = new AudioContext();
+    const ctx = sharedAudioCtx;
     // Resume context in case it was suspended by browser autoplay policy
     if (ctx.state === 'suspended') ctx.resume();
 

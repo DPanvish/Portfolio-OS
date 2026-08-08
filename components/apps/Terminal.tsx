@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { parseCommand } from '@/lib/commands/parser';
 import { motion } from 'framer-motion';
 import { playRetroSound } from '@/lib/audio';
+import { useWindowStore } from '@/store/useWindowStore';
 
 interface HistoryItem {
   command: string;
@@ -86,6 +87,7 @@ export default function Terminal() {
     }
   ]);
   const [input, setInput] = useState('');
+  const { openWindow } = useWindowStore();
   
   // For Up/Down arrow history recall
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
@@ -124,11 +126,21 @@ export default function Terminal() {
         setCommandHistory(prev => [...prev, cmd]);
       }
       
-      const output = parseCommand(cmd);
-      setHistory(prev => [...prev, { 
-        command: cmd, 
-        output: <DecodingOutput>{output}</DecodingOutput> 
-      }]);
+      const lowerCmd = cmd.toLowerCase();
+      if (lowerCmd === 'play snake' || lowerCmd === 'snake' || lowerCmd === './snake.bin') {
+         openWindow('snake', 'Neural Snake', 'Snake');
+         setHistory(prev => [...prev, {
+            command: cmd,
+            output: <div className="mb-4 text-green-400">Initializing neural snake module in new isolated window...</div>
+         }]);
+      } else {
+        const output = parseCommand(cmd);
+        setHistory(prev => [...prev, { 
+          command: cmd, 
+          output: <DecodingOutput>{output}</DecodingOutput> 
+        }]);
+      }
+      
       setInput('');
       setHistoryIndex(-1);
     } 

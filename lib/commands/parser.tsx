@@ -4,7 +4,6 @@ import Experience from '@/components/apps/Experience';
 import Projects from '@/components/apps/Projects';
 import Skills from '@/components/apps/Skills';
 import Contact from '@/components/apps/Contact';
-import Snake from '@/components/apps/terminal-games/Snake';
 
 export function parseCommand(commandStr: string): React.ReactNode {
   const cmd = commandStr.trim().toLowerCase();
@@ -82,11 +81,6 @@ export function parseCommand(commandStr: string): React.ReactNode {
     case 'sudo':
     case 'sudo su':
       return <div className="mb-4 text-pink-400 drop-shadow-[0_0_5px_rgba(244,114,182,0.6)]">PERMISSION DENIED. This incident will be reported to the sysadmin. (Try: sudo hire-me)</div>;
-    
-    case 'play snake':
-    case 'snake':
-    case './snake.bin':
-      return <Snake />;
       
     case 'matrix':
       return (

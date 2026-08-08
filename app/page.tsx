@@ -18,6 +18,7 @@ import ProjectDetail from "@/components/apps/ProjectDetail";
 import Skills from "@/components/apps/Skills";
 import Contact from "@/components/apps/Contact";
 import Terminal from "@/components/apps/Terminal";
+import Snake from "@/components/apps/Snake";
 
 // Dynamically render the correct app component based on the window state
 const renderApp = (app: OSWindow) => {
@@ -29,6 +30,7 @@ const renderApp = (app: OSWindow) => {
     case 'Skills': return <Skills />;
     case 'Contact': return <Contact />;
     case 'Terminal': return <Terminal />;
+    case 'Snake': return <Snake />;
     default:
       return (
         <div className="p-8 flex flex-col items-center justify-center h-full text-slate-400 text-center">
