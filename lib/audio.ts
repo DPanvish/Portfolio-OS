@@ -2,7 +2,7 @@
 
 // A zero-dependency Web Audio API synthesizer for retro UI sounds.
 // This prevents us from needing actual .mp3/.wav files in the /public folder.
-export const playRetroSound = (type: 'click' | 'open' | 'close' | 'minimize' | 'boot' | 'login', enabled: boolean) => {
+export const playRetroSound = (type: 'click' | 'open' | 'close' | 'minimize' | 'boot' | 'login' | 'type', enabled: boolean) => {
   if (!enabled || typeof window === 'undefined') return;
   
   try {
@@ -58,6 +58,16 @@ export const playRetroSound = (type: 'click' | 'open' | 'close' | 'minimize' | '
       gain.gain.exponentialRampToValueAtTime(0.001, now + 1.5);
       osc.start(now);
       osc.stop(now + 1.5);
+    }
+    else if (type === 'type') {
+      // Soft high-tech mechanical keyboard click
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(800 + Math.random() * 400, now); // randomized pitch for realism
+      osc.frequency.exponentialRampToValueAtTime(100, now + 0.02);
+      gain.gain.setValueAtTime(0.02, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.02);
+      osc.start(now);
+      osc.stop(now + 0.02);
     }
     else if (type === 'click') {
       osc.type = 'sine';
