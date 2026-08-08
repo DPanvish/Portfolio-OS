@@ -41,18 +41,20 @@ export default function MobileDesktop({ renderApp }: { renderApp: (app: any) => 
             
             <div className="grid grid-cols-3 gap-x-4 gap-y-8 place-items-center">
               {desktopApps.map((app) => (
-                <button
+                <motion.button
                   key={app.id}
+                  drag
+                  dragMomentum={false}
                   onClick={() => openWindow(app.id, app.title, app.component)}
-                  className="flex flex-col items-center gap-2 group focus:outline-none"
+                  className="flex flex-col items-center gap-2 group focus:outline-none touch-none"
                 >
                   <div className="w-16 h-16 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-xl flex items-center justify-center active:scale-90 transition-transform">
                     <span className="text-3xl drop-shadow-lg">{app.icon}</span>
                   </div>
-                  <span className="text-[11px] font-medium text-slate-200 bg-black/40 px-2.5 py-0.5 rounded-full shadow-sm drop-shadow-sm">
+                  <span className="text-[11px] font-medium text-slate-200 bg-black/40 px-2.5 py-0.5 rounded-full shadow-sm drop-shadow-sm pointer-events-none">
                     {app.title}
                   </span>
-                </button>
+                </motion.button>
               ))}
             </div>
           </motion.div>
