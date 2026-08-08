@@ -45,9 +45,6 @@ export default function CustomCursor() {
       
       // 1. Magnetic Pull
       if (magnetTarget && !reducedMotion) {
-        const rect = magnetTarget.getBoundingClientRect();
-        targetX = rect.left + rect.width / 2;
-        targetY = rect.top + rect.height / 2;
         setCursorState("magnet");
       } 
       // 2. React-Rnd Resize Handles
