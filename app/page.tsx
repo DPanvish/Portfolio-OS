@@ -7,6 +7,8 @@ import Window from "@/components/os/Window";
 import BootSequence from "@/components/os/BootSequence";
 import LoginScreen from "@/components/os/LoginScreen";
 import { useWindowStore } from "@/store/useWindowStore";
+import MobileDesktop from "@/components/os/MobileDesktop";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 // Import Apps
 import About from "@/components/apps/About";
@@ -41,6 +43,7 @@ export default function Home() {
   const [appState, setAppState] = useState<'pre-boot' | 'booting' | 'login' | 'desktop'>('pre-boot');
   const { windows } = useWindowStore();
   const openApps = Object.values(windows);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     // Intentionally removed sessionStorage check per user request.
@@ -78,16 +81,21 @@ export default function Home() {
       {/* 3. The Desktop Environment */}
       {appState === 'desktop' && (
         <>
-          <Desktop>
-            {/* Dynamically render all open windows */}
-            {openApps.map((app) => (
-              <Window key={app.id} id={app.id} title={app.title}>
-                {renderApp(app)}
-              </Window>
-            ))}
-          </Desktop>
-
-          <Taskbar />
+          {isMobile ? (
+            <MobileDesktop renderApp={renderApp} />
+          ) : (
+            <>
+              <Desktop>
+                {/* Dynamically render all open windows */}
+                {openApps.map((app) => (
+                  <Window key={app.id} id={app.id} title={app.title}>
+                    {renderApp(app)}
+                  </Window>
+                ))}
+              </Desktop>
+              <Taskbar />
+            </>
+          )}
         </>
       )}
 
