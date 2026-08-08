@@ -66,11 +66,11 @@ export default function CustomCursor() {
         setCursorState("grab");
       } 
       // 4. Text
-      else if (textTarget || window.getComputedStyle(target).cursor === 'text') {
+      else if (textTarget) {
         setCursorState("text");
       } 
       // 5. Pointer
-      else if (pointerTarget || window.getComputedStyle(target).cursor === 'pointer') {
+      else if (pointerTarget) {
         setCursorState("pointer");
       } 
       // 6. Default
@@ -102,7 +102,8 @@ export default function CustomCursor() {
 
   // Thematic Cyberpunk HUD Visual States
   const variants = {
-    default: { width: 14, height: 14, borderRadius: "50%", backgroundColor: "rgba(34, 211, 238, 0.8)", border: "0px solid transparent", boxShadow: "0 0 10px rgba(34, 211, 238, 0.5)", mixBlendMode: "normal" as any },
+    // The default state now looks like a hollow cyber-node to match the particles
+    default: { width: 20, height: 20, borderRadius: "50%", backgroundColor: "rgba(34, 211, 238, 0.1)", border: "2px solid rgba(34, 211, 238, 0.6)", boxShadow: "0 0 10px rgba(34, 211, 238, 0.5)", mixBlendMode: "normal" as any },
     pointer: { width: 36, height: 36, borderRadius: "50%", backgroundColor: "rgba(34, 211, 238, 0.1)", border: "2px solid rgba(34, 211, 238, 0.8)", boxShadow: "0 0 15px rgba(34, 211, 238, 0.5)", mixBlendMode: "normal" as any },
     grab: { width: 32, height: 32, borderRadius: "50%", backgroundColor: "rgba(34, 211, 238, 0.1)", border: "2px dashed rgba(34, 211, 238, 0.8)", boxShadow: "0 0 10px rgba(34, 211, 238, 0.3)", mixBlendMode: "normal" as any },
     text: { width: 4, height: 20, borderRadius: "0px", backgroundColor: "rgba(34, 211, 238, 1)", border: "0px solid transparent", boxShadow: "0 0 10px rgba(34, 211, 238, 0.8)", mixBlendMode: "normal" as any },
@@ -124,12 +125,12 @@ export default function CustomCursor() {
       className="fixed top-0 left-0 pointer-events-none z-[10000] flex items-center justify-center"
       animate={{
         ...variants[cursorState],
-        scale: isClicked ? 0.7 : 1,
+        // Removed the scale pulse on click to keep it feeling completely snappy and less "animated"
       }}
       transition={
         reducedMotion 
           ? { duration: 0 }
-          : { type: "spring", stiffness: 400, damping: 28, mass: 0.5 }
+          : { type: "tween", duration: 0.1, ease: "easeOut" }
       }
     >
       {cursorState === "text" && (

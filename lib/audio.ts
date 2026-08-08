@@ -2,7 +2,7 @@
 
 // A zero-dependency Web Audio API synthesizer for retro UI sounds.
 // This prevents us from needing actual .mp3/.wav files in the /public folder.
-export const playRetroSound = (type: 'click' | 'open' | 'close' | 'minimize' | 'boot' | 'login' | 'type', enabled: boolean) => {
+export const playRetroSound = (type: 'click' | 'open' | 'close' | 'minimize' | 'boot' | 'login' | 'type' | 'spawn', enabled: boolean) => {
   if (!enabled || typeof window === 'undefined') return;
   
   try {

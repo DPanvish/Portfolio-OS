@@ -17,12 +17,16 @@ export default function InteractiveBackground() {
       color: { value: "transparent" },
     },
     fpsLimit: 60,
-    interactivity: {
+      interactivity: {
       detectsOn: "window" as const,
       events: {
+        onClick: {
+          enable: true,
+          mode: "push",
+        },
         onHover: {
           enable: true,
-          mode: "grab", 
+          mode: ["grab", "bubble"], // Connects lasers AND makes nodes glow/grow
         },
         resize: {
           enable: true,
@@ -35,6 +39,15 @@ export default function InteractiveBackground() {
             opacity: 0.8,
             color: "#22d3ee" // Bright Cyan glowing grab lines
           },
+        },
+        bubble: {
+          distance: 250,
+          size: 6,
+          duration: 0.4,
+          opacity: 1
+        },
+        push: {
+          quantity: 3, // Spawns 3 new nodes per click
         },
       },
     },

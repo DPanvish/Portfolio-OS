@@ -4,6 +4,7 @@ import React from "react";
 import { useWindowStore } from "@/store/useWindowStore";
 import { motion } from "framer-motion";
 import InteractiveBackground from "./InteractiveBackground";
+import { playRetroSound } from "@/lib/audio";
 
 const desktopApps = [
   { id: "about", title: "About.txt", component: "About", icon: "📝" },
@@ -40,7 +41,7 @@ const DesktopIcon = ({ app, onOpen }: { app: any, onOpen: () => void }) => {
 };
 
 export default function Desktop({ children }: { children: React.ReactNode }) {
-  const { openWindow } = useWindowStore();
+  const { openWindow, soundEnabled } = useWindowStore();
 
   return (
     <div className="relative w-full h-[calc(100vh-3rem)] flex flex-col p-6 overflow-hidden">
