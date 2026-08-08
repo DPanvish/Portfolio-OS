@@ -18,12 +18,14 @@ const desktopApps = [
 const DesktopIcon = ({ app, onOpen }: { app: any, onOpen: () => void }) => {
   return (
     <motion.button
+      drag
+      dragMomentum={false}
       data-cursor="magnet"
       onDoubleClick={onOpen}
       onTouchEnd={onOpen}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
-      className="flex flex-col items-center gap-3 group focus:outline-none w-24 pointer-events-auto"
+      className="flex flex-col items-center gap-3 group focus:outline-none w-24 pointer-events-auto cursor-grab active:cursor-grabbing"
     >
       <div className="w-16 h-16 bg-white/5 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-xl flex items-center justify-center group-hover:bg-white/10 group-hover:border-white/20 transition-all duration-300 relative overflow-hidden">
         {/* Subtle, premium diagonal shine on hover */}

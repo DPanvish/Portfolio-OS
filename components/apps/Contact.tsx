@@ -5,17 +5,23 @@ import React, { useState } from 'react';
 export default function Contact() {
   const [status, setStatus] = useState<"idle" | "sending" | "sent">("idle");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setStatus("sending");
     
-    // Simulate a network request. 
-    // In production, wire this to Formspree: action="https://formspree.io/f/YOUR_ID"
+    // Extract form data
+    const formData = new FormData(e.currentTarget);
+    const subject = formData.get('subject') as string || "Let's work together!";
+    const message = formData.get('message') as string || "";
+    
+    // Wire to real local mail client
+    window.location.href = `mailto:hello@yourportfolio.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+    
+    // Show success state
     setTimeout(() => {
       setStatus("sent");
-      // Reset after 3 seconds
       setTimeout(() => setStatus("idle"), 3000);
-    }, 1500);
+    }, 500);
   };
 
   return (
@@ -80,6 +86,7 @@ export default function Contact() {
           <label className="w-20 text-slate-400 font-semibold text-xs tracking-wider uppercase group-focus-within:text-os-accent transition-colors">Subject:</label>
           <input 
             type="text" 
+            name="subject"
             placeholder="Let's work together!"
             required
             className="flex-1 bg-transparent border-none focus:outline-none text-sm font-semibold text-slate-900 placeholder:text-slate-300"
@@ -87,6 +94,7 @@ export default function Contact() {
         </div>
 
         <textarea 
+          name="message"
           placeholder="Write your message here..."
           required
           className="flex-1 w-full resize-none bg-transparent border-none focus:outline-none text-sm text-slate-700 leading-relaxed custom-scrollbar placeholder:text-slate-300"
