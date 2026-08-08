@@ -11,11 +11,6 @@ export default function CustomCursor() {
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
   
-  // Springs apply the premium "lag/drag" effect - tightened significantly for better responsiveness
-  const springConfig = { damping: 30, stiffness: 600, mass: 0.1 };
-  const smoothX = useSpring(cursorX, springConfig);
-  const smoothY = useSpring(cursorY, springConfig);
-
   const [cursorState, setCursorState] = useState<
     "default" | "pointer" | "text" | "grab" | "magnet" | 
     "resize-ew" | "resize-ns" | "resize-nwse" | "resize-nesw"
@@ -86,6 +81,7 @@ export default function CustomCursor() {
         setCursorState("default");
       }
 
+      // INSTANT 1:1 hardware mapping (Zero lag)
       cursorX.set(targetX);
       cursorY.set(targetY);
     };
@@ -123,8 +119,8 @@ export default function CustomCursor() {
   return (
     <motion.div
       style={{
-        x: reducedMotion ? cursorX : smoothX,
-        y: reducedMotion ? cursorY : smoothY,
+        x: cursorX, // 0 lag
+        y: cursorY, // 0 lag
         translateX: "-50%",
         translateY: "-50%",
       }}
