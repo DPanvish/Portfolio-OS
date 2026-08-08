@@ -61,7 +61,8 @@ export default function Window({ id, title, children }: WindowProps) {
           disableDragging={isMaximized}
           enableResizing={!isMaximized}
           // If maximized, we forcefully override the transform/dimensions applied by react-rnd
-          className={isMaximized ? "!w-full !h-full !transform-none !top-0 !left-0" : ""}
+          // CRITICAL: pointer-events-auto ensures the window receives clicks inside the desktop wrapper
+          className={`pointer-events-auto ${isMaximized ? "!w-full !h-full !transform-none !top-0 !left-0" : ""}`}
         >
           <motion.div 
             variants={windowVariants}
