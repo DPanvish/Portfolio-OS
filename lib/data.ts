@@ -21,13 +21,26 @@ export const portfolioData = {
       id: 'proj-1',
       title: 'OS Portfolio',
       description: 'The very portfolio you are viewing right now. It simulates a premium desktop environment with draggable windows, a terminal engine, and a custom interactive cursor.',
-      link: 'https://github.com/yourusername/portfolio-os',
+      images: [
+        'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80',
+        'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80',
+        'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80'
+      ],
+      techStack: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Framer Motion'],
+      link: 'https://portfolio-os.vercel.app',
+      github: 'https://github.com/yourusername/portfolio-os',
     },
     {
       id: 'proj-2',
       title: 'Headless E-commerce Platform',
       description: 'A headless e-commerce solution integrating a Shopify backend with a lightning-fast Next.js frontend.',
-      link: '#',
+      images: [
+        'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80',
+        'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=800&q=80'
+      ],
+      techStack: ['React', 'Shopify Storefront API', 'GraphQL', 'Stripe'],
+      link: 'https://ecommerce-demo.vercel.app',
+      github: 'https://github.com/yourusername/headless-ecommerce',
     }
   ],
   skills: [

@@ -24,7 +24,7 @@ interface WindowStore {
 export const useWindowStore = create<WindowStore>((set) => ({
   windows: {},
   windowOrder: [],
-  soundEnabled: false, // Muted by default per specs
+  soundEnabled: true,
   
   toggleSound: () => set((state) => ({ soundEnabled: !state.soundEnabled })),
   

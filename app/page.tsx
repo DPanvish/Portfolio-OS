@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Desktop from "@/components/os/Desktop";
 import Taskbar from "@/components/os/Taskbar";
 import Window from "@/components/os/Window";
 import BootSequence from "@/components/os/BootSequence";
+import LoginScreen from "@/components/os/LoginScreen";
 import { useWindowStore } from "@/store/useWindowStore";
 
 // Import Apps
@@ -15,7 +16,6 @@ import ProjectDetail from "@/components/apps/ProjectDetail";
 import Skills from "@/components/apps/Skills";
 import Contact from "@/components/apps/Contact";
 import Terminal from "@/components/apps/Terminal";
-import { OSWindow } from "@/store/useWindowStore";
 
 // Dynamically render the correct app component based on the window state
 const renderApp = (app: OSWindow) => {
@@ -32,25 +32,51 @@ const renderApp = (app: OSWindow) => {
         <div className="p-8 flex flex-col items-center justify-center h-full text-slate-400 text-center">
           <span className="text-4xl mb-4">🚧</span>
           <p>The <strong>{app.component}</strong> app is currently under construction.</p>
-          <p className="text-xs mt-2 opacity-60">We will build this out next in Phase 3.</p>
         </div>
       );
   }
 };
 
 export default function Home() {
-  const [booted, setBooted] = useState(false);
+  const [appState, setAppState] = useState<'pre-boot' | 'booting' | 'login' | 'desktop'>('pre-boot');
   const { windows } = useWindowStore();
   const openApps = Object.values(windows);
+
+  useEffect(() => {
+    // Intentionally removed sessionStorage check per user request.
+    // On hard reload, the OS will always reset to the power-on/login sequence.
+  }, []);
 
   return (
     <main className="relative w-screen h-screen overflow-hidden flex flex-col bg-slate-900 text-slate-100">
       
-      {/* The boot sequence will run once and then unmount */}
-      {!booted && <BootSequence onComplete={() => setBooted(true)} />}
+      {/* 0. Audio Authorization Screen (Browsers require a click to play audio) */}
+      {appState === 'pre-boot' && (
+        <div 
+          onClick={() => setAppState('booting')}
+          className="absolute inset-0 z-[10000] bg-black flex flex-col items-center justify-center cursor-pointer hover:bg-slate-950 transition-colors"
+        >
+          <div className="w-16 h-16 rounded-full border-2 border-slate-600 flex items-center justify-center mb-6 animate-pulse shadow-[0_0_20px_rgba(255,255,255,0.1)]">
+            <span className="text-2xl text-slate-300">⏻</span>
+          </div>
+          <p className="text-slate-400 font-mono tracking-widest text-sm animate-bounce">CLICK TO POWER ON</p>
+        </div>
+      )}
 
-      {/* Once booted, render the actual OS */}
-      {booted && (
+      {/* 1. Cinematic Boot Sequence */}
+      {appState === 'booting' && (
+        <BootSequence onComplete={() => setAppState('login')} />
+      )}
+
+      {/* 2. Real-style OS Login Screen */}
+      {appState === 'login' && (
+        <LoginScreen onLogin={() => {
+          setAppState('desktop');
+        }} />
+      )}
+
+      {/* 3. The Desktop Environment */}
+      {appState === 'desktop' && (
         <>
           <Desktop>
             {/* Dynamically render all open windows */}
