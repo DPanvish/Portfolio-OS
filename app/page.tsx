@@ -43,11 +43,8 @@ export default function Home() {
   const openApps = Object.values(windows);
 
   useEffect(() => {
-    // If they already logged in this session, skip straight to desktop
-    const hasLoggedIn = sessionStorage.getItem("hasLoggedIn");
-    if (hasLoggedIn === "true") {
-      setAppState('desktop');
-    }
+    // Intentionally removed sessionStorage check per user request.
+    // On hard reload, the OS will always reset to the power-on/login sequence.
   }, []);
 
   return (
@@ -74,7 +71,6 @@ export default function Home() {
       {/* 2. Real-style OS Login Screen */}
       {appState === 'login' && (
         <LoginScreen onLogin={() => {
-          sessionStorage.setItem("hasLoggedIn", "true");
           setAppState('desktop');
         }} />
       )}
