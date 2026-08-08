@@ -61,7 +61,7 @@ export default function Window({ id, title, children }: WindowProps) {
           disableDragging={isMaximized}
           enableResizing={!isMaximized}
           // If maximized, we forcefully override the transform/dimensions applied by react-rnd
-          className={isMaximized ? "!w-full !h-[calc(100%-3rem)] !transform-none !top-0 !left-0" : ""}
+          className={isMaximized ? "!w-full !h-full !transform-none !top-0 !left-0" : ""}
         >
           <motion.div 
             variants={windowVariants}
@@ -71,40 +71,37 @@ export default function Window({ id, title, children }: WindowProps) {
             className="w-full h-full flex flex-col bg-slate-900 border border-slate-700/50 shadow-2xl overflow-hidden rounded-lg backdrop-blur-md bg-opacity-95"
           >
             {/* Title Bar (OS Chrome) */}
-            <div className="window-titlebar flex items-center justify-between px-4 py-2 bg-slate-800/80 border-b border-slate-700/50 cursor-grab active:cursor-grabbing select-none">
+            <div className="window-titlebar flex items-center justify-between pl-4 pr-2 py-1.5 bg-slate-800/80 border-b border-slate-700/50 cursor-grab active:cursor-grabbing select-none">
               
-              {/* Traffic Light Buttons */}
-              <div className="flex space-x-2">
-                <button 
-                  onClick={(e) => { e.stopPropagation(); closeWindow(id); }}
-                  className="w-3 h-3 rounded-full bg-red-500/90 hover:bg-red-400 focus:outline-none flex items-center justify-center transition-colors group"
-                  aria-label="Close"
-                >
-                  <span className="opacity-0 group-hover:opacity-100 text-[8px] text-red-900 leading-none">x</span>
-                </button>
-                <button 
-                  onClick={(e) => { e.stopPropagation(); minimizeWindow(id); }}
-                  className="w-3 h-3 rounded-full bg-yellow-500/90 hover:bg-yellow-400 focus:outline-none flex items-center justify-center transition-colors group"
-                  aria-label="Minimize"
-                >
-                  <span className="opacity-0 group-hover:opacity-100 text-[8px] text-yellow-900 leading-none">-</span>
-                </button>
-                <button 
-                  onClick={(e) => { e.stopPropagation(); setIsMaximized(!isMaximized); }}
-                  className="w-3 h-3 rounded-full bg-green-500/90 hover:bg-green-400 focus:outline-none flex items-center justify-center transition-colors group"
-                  aria-label="Maximize"
-                >
-                  <span className="opacity-0 group-hover:opacity-100 text-[8px] text-green-900 leading-none">+</span>
-                </button>
-              </div>
-
               {/* Window Title */}
-              <div className="text-slate-300 text-xs font-semibold tracking-wide">
+              <div className="text-slate-300 text-xs font-semibold tracking-wide flex items-center gap-2">
                 {title}
               </div>
 
-              {/* Empty space for flexbox balance */}
-              <div className="w-12"></div>
+              {/* Window Controls (Explicit Windows Style) */}
+              <div className="flex items-center gap-1">
+                <button 
+                  onClick={(e) => { e.stopPropagation(); minimizeWindow(id); }}
+                  className="w-8 h-6 rounded hover:bg-slate-700/80 focus:outline-none flex items-center justify-center transition-colors text-slate-400 hover:text-white"
+                  aria-label="Minimize"
+                >
+                  <span className="text-lg leading-none mb-1.5">-</span>
+                </button>
+                <button 
+                  onClick={(e) => { e.stopPropagation(); setIsMaximized(!isMaximized); }}
+                  className="w-8 h-6 rounded hover:bg-slate-700/80 focus:outline-none flex items-center justify-center transition-colors text-slate-400 hover:text-white"
+                  aria-label="Maximize"
+                >
+                  <span className="w-2.5 h-2.5 border border-current rounded-sm"></span>
+                </button>
+                <button 
+                  onClick={(e) => { e.stopPropagation(); closeWindow(id); }}
+                  className="w-8 h-6 rounded hover:bg-red-500 hover:text-white focus:outline-none flex items-center justify-center transition-colors text-slate-400"
+                  aria-label="Close"
+                >
+                  <span className="text-[10px] font-bold">✕</span>
+                </button>
+              </div>
             </div>
 
             {/* Application Content Area */}
